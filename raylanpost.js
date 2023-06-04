@@ -173,4 +173,9 @@ $(document).ready(function() {
 
   // Obtener los posts al cargar la página
   getPosts();
-});
+
+// Mostrar los resultados después de obtener los posts
+showResults();
+
+}); // Fin de $(document).ready()
+
