@@ -84,7 +84,7 @@ $(document).ready(function() {
     if (etiquetas.length === 0) {
       searchStatus.innerText = 'No se encontraron resultados para la búsqueda actual.';
     } else {
-      searchStatus.innerText = `Mostrando ${etiquetas.length} resultados para la búsqueda actual.`;
+      const searchStatus = document.getElementById('searchStatus');
     }
 
     etiquetas.forEach(etiqueta => {
