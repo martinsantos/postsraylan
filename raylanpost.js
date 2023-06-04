@@ -113,7 +113,8 @@ $(document).ready(function() {
         }
       }
     
-      function goToNextPage(event) {
+    // Go to the next page of posts
+    function goToNextPage(event) {
         event.preventDefault();
         const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
         if (currentPage < totalPages - 1) {
