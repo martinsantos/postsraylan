@@ -105,11 +105,31 @@ $(document).ready(function() {
       nextButton.disabled = false;
     }
   }
-
   function goToPrevPage(event) {
     event.preventDefault();
-    if (currentPage > 0) {
-      currentPage--;
-      showResults();
-    }
-  };
+      if (currentPage > 0) {
+        currentPage--;
+        showResults();
+        }
+      }
+    
+      function goToNextPage(event) {
+        event.preventDefault();
+        const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          showResults();
+        }
+      }
+    
+      document.getElementById('buscarNumero').addEventListener('submit', getPostsByNumber);
+      document.getElementById('buscarTexto').addEventListener('submit', getPostsByText);
+      document.getElementById('textoRelacionadoButton').addEventListener('click', getPostsByText);
+      document.getElementById('fechaButton').addEventListener('click', getPostsByDate);
+      document.getElementById('prevButton').addEventListener('click', goToPrevPage);
+      document.getElementById('nextButton').addEventListener('click', goToNextPage);
+    
+      // Get posts when the page loads
+      getPosts();
+    });
+    
