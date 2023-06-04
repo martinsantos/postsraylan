@@ -4,7 +4,8 @@ $(document).ready(function() {
     const fechaInicio = new Date(document.getElementById('fechaInicio').value);
     const fechaFin = new Date(document.getElementById('fechaFin').value);
 
-    axios.get('your_posts_2.json', { responseType: 'json' })
+
+       axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         const data = response.data;
         const etiquetas = data.map(item => {
