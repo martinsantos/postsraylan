@@ -18,27 +18,31 @@ $(document).ready(function() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
+        showResults();
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  function getPostsByNumber() {
+  function getPostsByNumber(event) {
+    event.preventDefault();
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
     etiquetas = etiquetas.slice(0, numeroPost);
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByText() {
+  function getPostsByText(event) {
+    event.preventDefault();
     const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
     etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByDate() {
+  function getPostsByDate(event) {
+    event.preventDefault();
     const fechaInicioInput = document.getElementById('fechaInicio');
     const fechaFinInput = document.getElementById('fechaFin');
 
@@ -102,55 +106,10 @@ $(document).ready(function() {
     }
   }
 
-  function goToPrevPage() {
+  function goToPrevPage(event) {
+    event.preventDefault();
     if (currentPage > 0) {
       currentPage--;
       showResults();
     }
-  }
-
-  function goToNextPage() {
-    const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
-    if (currentPage < totalPages
-
-      if (currentPage < totalPages - 1) {
-        currentPage++;
-        showResults();
-      }
-    }
-  
-    document.getElementById('buscarNumero').addEventListener('submit', function(event) {
-      event.preventDefault();
-      getPostsByNumber();
-    });
-  
-    document.getElementById('buscarTexto').addEventListener('submit', function(event) {
-      event.preventDefault();
-      getPostsByText();
-    });
-  
-    document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
-      event.preventDefault();
-      getPostsByText();
-    });
-  
-    document.getElementById('fechaButton').addEventListener('click', function(event) {
-      event.preventDefault();
-      getPostsByDate();
-    });
-  
-    document.getElementById('prevButton').addEventListener('click', function(event) {
-      event.preventDefault();
-      goToPrevPage();
-    });
-  
-    document.getElementById('nextButton').addEventListener('click', function(event) {
-      event.preventDefault();
-      goToNextPage();
-    });
-  
-    // Get posts when the page loads
-    getPosts();
-  });
-  
-
+  };
