@@ -25,21 +25,90 @@ $(document).ready(function() {
       });
   }
 
-  function getPostsByNumber() {
+  function getPostsByNumber(event) {
+    event.preventDefault();
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
     etiquetas = etiquetas.slice(0, numeroPost);
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByText() {
+  function getPostsByText(event) {
+    event.preventDefault();
     const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
     etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByDate() {
+  function getPostsByDate(event) {
+    event.preventDefault();
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
+
+    let fechaInicio;
+    let fechaFin;
+
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    if (fechaInicio && fechaFin) {
+      etiquetas = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin);
+    }
+
+    currentPage = 0;
+    showResults();
+  }
+$(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10;
+  let etiquetas = [];
+
+  function createEtiqueta(item) {
+    if (item.data && item.data.length > 0 && item.data[0].post) {
+      const post = decodeURIComponent(escape(item.data[0].post));
+      const timestamp = new Date(item.timestamp * 1000);
+      return {
+        post: post,
+        timestamp: timestamp
+      };
+    }
+  }
+
+  function getPosts() {
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
+        showResults();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  function getPostsByNumber(event) {
+    event.preventDefault();
+    const numeroPost = parseInt(document.getElementById('numeroPost').value);
+    etiquetas = etiquetas.slice(0, numeroPost);
+    currentPage = 0;
+    showResults();
+  }
+
+  function getPostsByText(event) {
+    event.preventDefault();
+    const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
+    etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
+    currentPage = 0;
+    showResults();
+  }
+
+  function getPostsByDate(event) {
+    event.preventDefault();
     const fechaInicioInput = document.getElementById('fechaInicio');
     const fechaFinInput = document.getElementById('fechaFin');
 
@@ -102,14 +171,16 @@ $(document).ready(function() {
     }
   }
 
-  function goToPrevPage() {
+  function goToPrevPage(event) {
+    event.preventDefault();
     if (currentPage > 0) {
       currentPage--;
       showResults();
     }
   }
 
-  function goToNextPage() {
+  function goToNextPage(event) {
+    event.preventDefault();
     const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
     if (currentPage < totalPages - 1) {
       currentPage++;
@@ -117,30 +188,11 @@ $(document).ready(function() {
     }
   }
 
-  document.getElementById('numeroPostButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    getPostsByNumber();
-  });
-
-  document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    getPostsByText();
-  });
-
-  document.getElementById('fechaButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    getPostsByDate();
-  });
-
-  document.getElementById('prevButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    goToPrevPage();
-  });
-
-  document.getElementById('nextButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    goToNextPage();
-  });
+  document.getElementById('numeroPostButton').addEventListener('click', getPostsByNumber);
+  document.getElementById('textoRelacionadoButton').addEventListener('click', getPostsByText);
+  document.getElementById('fechaButton').addEventListener('click', getPostsByDate);
+  document.getElementById('prevButton').addEventListener('click', goToPrevPage);
+  document.getElementById('nextButton').addEventListener('click', goToNextPage);
 
   // Get posts when the page loads
   getPosts();

@@ -14,14 +14,14 @@
     <div>
       <label for="numeroPost">Número de Post:</label>
       <input type="number" id="numeroPost">
-      <button type="submit" id="numeroPostButton">Obtener Posts</button>
+      <button type="button" id="numeroPostButton">Obtener Posts</button>
     </div>
     
 
     <div>
       <label for="textoRelacionado">Texto Relacionado:</label>
       <input type="text" id="textoRelacionado">
-      <button id="textoRelacionadoButton">Obtener Posts</button>
+      <button type="button" id="textoRelacionadoButton">Obtener Posts</button>
     </div>
 
     <div>
@@ -29,17 +29,18 @@
       <input type="date" id="fechaInicio">
       <label for="fechaFin">Fecha de fin:</label>
       <input type="date" id="fechaFin">
-      <button id="fechaButton">Buscar por fecha</button>
+      <button type="button" id="fechaButton">Buscar por fecha</button>
     </div>
 
-    <div id="resultado"></div>
-
-    <div>
-      <button id="prevButton" disabled>Anterior</button>
-      <button id="nextButton" disabled>Siguiente</button>
+    <div id="resultado">
+      <div id="searchResult" class="message"></div>
+      <div id="postList"></div>
+      <ul class="pagination" id="pagination"></ul>
+      <p class="message" id="searchStatus">Continúa buscando o borra los campos para realizar una nueva búsqueda.</p>
     </div>
 
-    <p id="searchStatus"></p>
+    <button type="button" id="prevButton">Anterior</button>
+    <button type="button" id="nextButton">Siguiente</button>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
