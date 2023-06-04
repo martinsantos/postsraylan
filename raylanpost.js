@@ -3,8 +3,42 @@ $(document).ready(function() {
   const itemsPerPage = 10;
   let etiquetas = [];
 
+  function createEtiqueta(item) {
+    if (item.data && item.data.length > 0 && item.data[0].post) {
+      const post = decodeURIComponent(escape(item.data[0].post));
+      const timestamp = new Date(item.timestamp * 1000);
+      return {
+        post: post,
+        timestamp: timestamp
+      };
+    }
+  }
+
+  function getPosts() {
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
+    etiquetas = etiquetas.slice(0, numeroPost);
+    currentPage = 0;
+    showResults();
+  }
+
+  function getPostsByText() {
+    const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
+    etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
+    currentPage = 0;
+    showResults();
+  }
+
+  function getPostsByDate() {
     const fechaInicioInput = document.getElementById('fechaInicio');
     const fechaFinInput = document.getElementById('fechaFin');
 
@@ -19,67 +53,12 @@ $(document).ready(function() {
       fechaFin = new Date(fechaFinInput.value);
     }
 
-    axios.get('./your_posts_2.json', { responseType: 'json' })
-      .then(response => {
-        let data = response.data;
+    if (fechaInicio && fechaFin) {
+      etiquetas = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin);
+    }
 
-        if (fechaInicio && fechaFin) {
-          data = data.filter(item => {
-            if (item.timestamp) {
-              const timestamp = new Date(item.timestamp * 1000);
-              return fechaInicio <= timestamp && timestamp <= fechaFin;
-            } else {
-              return false;
-            }
-          });
-        }
-
-        etiquetas = data.map(item => {
-          if (item.data && item.data.length > 0 && item.data[0].post) {
-            const post = decodeURIComponent(escape(item.data[0].post));
-            const timestamp = new Date(item.timestamp * 1000);
-            return {
-              post: post,
-              timestamp: timestamp
-            };
-          }
-        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
-
-        currentPage = 0;
-        showResults();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
-  function getPostsByText() {
-    const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
-
-    axios.get('./your_posts_2.json', { responseType: 'json' })
-      .then(response => {
-        const data = response.data;
-
-        etiquetas = data.filter(item => {
-          if (item.data && item.data.length > 0 && item.data[0].post) {
-            const post = decodeURIComponent(escape(item.data[0].post));
-            return post.toLowerCase().includes(textoRelacionado);
-          }
-        }).map(item => {
-          const post = decodeURIComponent(escape(item.data[0].post));
-          const timestamp = new Date(item.timestamp * 1000);
-          return {
-            post: post,
-            timestamp: timestamp
-          };
-        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
-
-        currentPage = 0;
-        showResults();
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    currentPage = 0;
+    showResults();
   }
 
   function showResults() {
@@ -132,34 +111,46 @@ $(document).ready(function() {
 
   function goToNextPage() {
     const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
-    if (currentPage < totalPages - 1) {
-      currentPage++;
-      showResults();
+    if (currentPage < totalPages
+
+      if (currentPage < totalPages - 1) {
+        currentPage++;
+        showResults();
+      }
     }
-  }
-
-  document.getElementById('buscarNumero').addEventListener('submit', function(event) {
-    event.preventDefault();
-    getPostsByNumber();
+  
+    document.getElementById('buscarNumero').addEventListener('submit', function(event) {
+      event.preventDefault();
+      getPostsByNumber();
+    });
+  
+    document.getElementById('buscarTexto').addEventListener('submit', function(event) {
+      event.preventDefault();
+      getPostsByText();
+    });
+  
+    document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      getPostsByText();
+    });
+  
+    document.getElementById('fechaButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      getPostsByDate();
+    });
+  
+    document.getElementById('prevButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      goToPrevPage();
+    });
+  
+    document.getElementById('nextButton').addEventListener('click', function(event) {
+      event.preventDefault();
+      goToNextPage();
+    });
+  
+    // Get posts when the page loads
+    getPosts();
   });
+  
 
-  document.getElementById('buscarTexto').addEventListener('submit', function(event) {
-    event.preventDefault();
-    getPostsByText();
-  });
-
-  document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    getPostsByText();
-  });
-
-  document.getElementById('prevButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    goToPrevPage();
-  });
-
-  document.getElementById('nextButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    goToNextPage();
-  });
-});

@@ -14,8 +14,11 @@
     <div>
       <label for="numeroPost">Número de Post:</label>
       <input type="number" id="numeroPost">
-      <form id="numeroPostButton">
-      </div>
+      <form id="buscarNumero">
+        <button type="submit" id="numeroPostButton">Obtener Posts</button>
+      </form>
+    </div>
+    
 
     <div>
       <label for="textoRelacionado">Texto Relacionado:</label>
@@ -31,8 +34,13 @@
       <button id="fechaButton">Buscar por fecha</button>
     </div>
 
+    <div>
+      <button id="prevButton" disabled>Anterior</button>
+      <button id="nextButton" disabled>Siguiente</button>
+    </div>
+
     <div id="resultado">
-      <dvi id="searchResult" class="message"></div>
+      <div id="searchResult" class="message"></div>
       <div id="postList"></div>
       <ul class="pagination" id="pagination"></ul>
       <p class="message" id="searchStatus">Continúa buscando o borra los campos para realizar una nueva búsqueda.</p>
