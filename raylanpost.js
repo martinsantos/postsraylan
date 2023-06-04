@@ -3,9 +3,9 @@ $(document).ready(function() {
   const itemsPerPage = 10;
   let etiquetas = [];
 
-    function createEtiqueta(item) {
+  function createEtiqueta(item) {
     if (item.data && item.data.length > 0 && item.data[0].post) {
-      const post = decodeURIComponent(escape(item.data[0].post));
+      const post = item.data[0].post;
       const timestamp = new Date(item.timestamp * 1000);
       return {
         post: post,
@@ -13,7 +13,6 @@ $(document).ready(function() {
       };
     }
   }
-
 
   function getPosts() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
@@ -25,7 +24,6 @@ $(document).ready(function() {
         console.error(error);
       });
   }
-
 
   function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
@@ -176,8 +174,6 @@ $(document).ready(function() {
   // Obtener los posts al cargar la página
   getPosts();
 
-// Mostrar los resultados después de obtener los posts
-showResults();
-
-}); // Fin de $(document).ready()
-
+  // Mostrar los resultados después de obtener los posts
+  showResults();
+});
