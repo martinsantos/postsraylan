@@ -20,10 +20,15 @@ $(document).ready(function() {
         let data = response.data;
 
         if (fechaInicio && fechaFin) {
-          data = data.filter(item => {
-            const timestamp = new Date(item.timestamp * 1000);
-            return fechaInicio <= timestamp && timestamp <= fechaFin;
-          });
+          data.filter(item => {
+            if (item) {
+              const timestamp = new Date(item.timestamp * 1000);
+              return fechaInicio <= timestamp && timestamp <= fechaFin;
+            } else {
+              return false;
+            }
+          });        
+
         }
 
         const etiquetas = data.map(item => {
