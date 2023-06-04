@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RAYLAN POSTAS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="raylanpoststylos.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Consulta de Posts</h1>
+  
+    <div>
+      <label for="numeroPost">Número de Post:</label>
+      <input type="number" id="numeroPost">
+      <button id="numeroPostButton">Obtener Posts</button>
+    </div>
+
+    <div>
+      <label for="textoRelacionado">Texto Relacionado:</label>
+      <input type="text" id="textoRelacionado">
+      <button id="textoRelacionadoButton">Obtener Posts</button>
+    </div>
+
+    <div>
+      <label for="fechaInicio">Fecha de inicio:</label>
+      <input type="date" id="fechaInicio">
+      <label for="fechaFin">Fecha de fin:</label>
+      <input type="date" id="fechaFin">
+      <button id="fechaButton">Buscar por fecha</button>
+    </div>
+
+    <div id="resultado">
+      <p id="searchResult" class="message"></p>
+      <div id="postList"></div>
+      <ul class="pagination" id="pagination"></ul>
+      <p class="message" id="searchStatus">Continúa buscando o borra los campos para realizar una nueva búsqueda.</p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@1.5.16/dist/clipboard.min.js"></script>
+  <script src="raylanpost.js"></script>
+</body>
+</html>
