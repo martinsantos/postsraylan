@@ -19,6 +19,7 @@ $(document).ready(function() {
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
         console.log(etiquetas); // Mostrar los datos en la consola
+        showResults();
       })
       .catch(error => {
         console.error(error);
@@ -139,17 +140,17 @@ $(document).ready(function() {
   // Reiniciar campos de búsqueda y resultados al hacer clic en los botones de búsqueda
   $('#numeroPostButton').click(function() {
     resetFields();
-    showResults();
+    getPostsByNumber();
   });
 
   $('#textoRelacionadoButton').click(function() {
     resetFields();
-    showResults();
+    getPostsByText();
   });
 
   $('#fechaButton').click(function() {
     resetFields();
-    showResults();
+    getPostsByDate();
   });
 
   // Habilitar navegación entre páginas
@@ -173,7 +174,4 @@ $(document).ready(function() {
 
   // Obtener los posts al cargar la página
   getPosts();
-
-  // Mostrar los resultados después de obtener los posts
-  showResults();
 });
