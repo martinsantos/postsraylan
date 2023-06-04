@@ -1,87 +1,86 @@
 body {
-    padding: 20px;
-    background-color: #f5f5f5;
-  }
-  
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input[type="number"],
-  input[type="text"],
-  button {
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0069d9;
-  }
-  
-  #resultado {
-    margin-top: 20px;
-  }
-  
-  .post {
-    margin-bottom: 40px;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #f7f7f7;
-  }
-  
-  .post-date {
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-  
-  .card-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .card-action {
-    cursor: pointer;
-    color: #007bff;
-    display: flex;
-    align-items: center;
-  }
-  
-  .card-action i {
-    margin-right: 5px;
-  }
-  
-  .icon {
-    width: 20px;
-    height: 20px;
-    vertical-align: middle;
-  }
-  
+  padding: 20px;
+  background-color: #f5f5f5;
+}
 
-  .post-item.active {
-    background-color: lightblue;
-  }
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="number"],
+input[type="text"],
+button {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0069d9;
+}
+
+#resultado {
+  margin-top: 20px;
+}
+
+.post {
+  margin-bottom: 40px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+}
+
+.post-date {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.card-action {
+  cursor: pointer;
+  color: #007bff;
+  display: flex;
+  align-items: center;
+}
+
+.card-action i {
+  margin-right: 5px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+
+.post-item.active {
+  background-color: lightblue;
+}
