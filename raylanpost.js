@@ -7,14 +7,18 @@ $(document).ready(function() {
     let fechaInicio;
     let fechaFin;
 
-    if (fechaInicioInput.value) {
-      fechaInicio = new Date(fechaInicioInput.value);
+    if (fechaInicio && fechaFin) {
+      data = data.filter(item => {
+        if (item) {
+          const timestamp = new Date(item.timestamp * 1000);
+          return fechaInicio <= timestamp && timestamp <= fechaFin;
+        } else {
+          return false;
+        }
+      });        
     }
-
-    if (fechaFinInput.value) {
-      fechaFin = new Date(fechaFinInput.value);
-    }
-
+    
+    
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         let data = response.data;
