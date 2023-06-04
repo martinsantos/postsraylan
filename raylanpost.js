@@ -25,24 +25,21 @@ $(document).ready(function() {
       });
   }
 
-  function getPostsByNumber(event) {
-    event.preventDefault();
+  function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
     etiquetas = etiquetas.slice(0, numeroPost);
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByText(event) {
-    event.preventDefault();
+  function getPostsByText() {
     const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
     etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
     currentPage = 0;
     showResults();
   }
 
-  function getPostsByDate(event) {
-    event.preventDefault();
+  function getPostsByDate() {
     const fechaInicioInput = document.getElementById('fechaInicio');
     const fechaFinInput = document.getElementById('fechaFin');
 
@@ -64,7 +61,6 @@ $(document).ready(function() {
     currentPage = 0;
     showResults();
   }
-
   function showResults() {
     const resultadoDiv = document.getElementById('resultado');
     const searchStatus = document.getElementById('searchStatus');
@@ -105,32 +101,47 @@ $(document).ready(function() {
       nextButton.disabled = false;
     }
   }
-  function goToPrevPage(event) {
+
+  function goToPrevPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      showResults();
+    }
+  }
+
+  function goToNextPage() {
+    const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
+    if (currentPage < totalPages - 1) {
+      currentPage++;
+      showResults();
+    }
+  }
+
+  document.getElementById('numeroPostButton').addEventListener('click', function(event) {
     event.preventDefault();
-      if (currentPage > 0) {
-        currentPage--;
-        showResults();
-        }
-      }
-    
-    // Go to the next page of posts
-    function goToNextPage(event) {
-        event.preventDefault();
-        const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
-        if (currentPage < totalPages - 1) {
-          currentPage++;
-          showResults();
-        }
-      }
-    
-      document.getElementById('buscarNumero').addEventListener('submit', getPostsByNumber);
-      document.getElementById('buscarTexto').addEventListener('submit', getPostsByText);
-      document.getElementById('textoRelacionadoButton').addEventListener('click', getPostsByText);
-      document.getElementById('fechaButton').addEventListener('click', getPostsByDate);
-      document.getElementById('prevButton').addEventListener('click', goToPrevPage);
-      document.getElementById('nextButton').addEventListener('click', goToNextPage);
-    
-      // Get posts when the page loads
-      getPosts();
-    });
-    
+    getPostsByNumber();
+  });
+
+  document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    getPostsByText();
+  });
+
+  document.getElementById('fechaButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    getPostsByDate();
+  });
+
+  document.getElementById('prevButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    goToPrevPage();
+  });
+
+  document.getElementById('nextButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    goToNextPage();
+  });
+
+  // Get posts when the page loads
+  getPosts();
+});
