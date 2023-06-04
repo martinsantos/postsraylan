@@ -148,14 +148,18 @@ $(document).ready(function() {
     getPostsByText();
   });
 
-  document.getElementById('buscarNumero').addEventListener('submit', function(event) {
-    event.preventDefault();
-    getPostsByNumber();
-  });
-  
   document.getElementById('textoRelacionadoButton').addEventListener('click', function(event) {
     event.preventDefault();
     getPostsByText();
   });
-  
+
+  document.getElementById('prevButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    goToPrevPage();
+  });
+
+  document.getElementById('nextButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    goToNextPage();
+  });
 });
