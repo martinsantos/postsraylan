@@ -18,6 +18,7 @@ $(document).ready(function() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
+        showResults();
       })
       .catch(error => {
         console.error(error);
@@ -75,10 +76,12 @@ $(document).ready(function() {
 
     currentPosts.forEach(item => {
       const postItem = document.createElement('div');
-      postItem.classList.add('post-item');
+      postItem.classList.add('card', 'mb-3');
       postItem.innerHTML = `
-        <div class="post-date">${item.timestamp}</div>
-        <div class="post-content">${item.post}</div>
+        <div class="card-body">
+          <h5 class="card-title">${item.timestamp}</h5>
+          <p class="card-text">${item.post}</p>
+        </div>
       `;
       postList.appendChild(postItem);
     });
@@ -105,15 +108,15 @@ $(document).ready(function() {
     const nextButton = document.getElementById('nextButton');
 
     if (currentPage === 0) {
-      prevButton.disabled = true;
+      prevButton.classList.add('disabled');
     } else {
-      prevButton.disabled = false;
+      prevButton.classList.remove('disabled');
     }
 
     if (currentPage === numPages - 1) {
-      nextButton.disabled = true;
+      nextButton.classList.add('disabled');
     } else {
-      nextButton.disabled = false;
+      nextButton.classList.remove('disabled');
     }
   }
 
