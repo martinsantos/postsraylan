@@ -4,7 +4,7 @@ $(document).ready(function() {
   let etiquetas = [];
 
   function getPostsByNumber() {
-    const numeroPost = document.getElementById('numeroPost').value;
+    const numeroPost = parseInt(document.getElementById('numeroPost').value);
     const fechaInicioInput = document.getElementById('fechaInicio');
     const fechaFinInput = document.getElementById('fechaFin');
 
@@ -25,7 +25,7 @@ $(document).ready(function() {
 
         if (fechaInicio && fechaFin) {
           data = data.filter(item => {
-            if (item) {
+            if (item.timestamp) {
               const timestamp = new Date(item.timestamp * 1000);
               return fechaInicio <= timestamp && timestamp <= fechaFin;
             } else {
@@ -54,7 +54,7 @@ $(document).ready(function() {
   }
 
   function getPostsByText() {
-    const textoRelacionado = document.getElementById('textoRelacionado').value;
+    const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
 
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
@@ -63,7 +63,7 @@ $(document).ready(function() {
         etiquetas = data.filter(item => {
           if (item.data && item.data.length > 0 && item.data[0].post) {
             const post = decodeURIComponent(escape(item.data[0].post));
-            return post.toLowerCase().includes(textoRelacionado.toLowerCase());
+            return post.toLowerCase().includes(textoRelacionado);
           }
         }).map(item => {
           const post = decodeURIComponent(escape(item.data[0].post));
@@ -91,7 +91,7 @@ $(document).ready(function() {
     const endIndex = startIndex + itemsPerPage;
     const currentPageItems = etiquetas.slice(startIndex, endIndex);
 
-    if (currentPageItems && currentPageItems.length > 0) {
+    if (currentPageItems.length > 0) {
       currentPageItems.forEach(etiqueta => {
         const fecha = etiqueta.timestamp.toLocaleDateString();
         const postHTML = `<div class="post">${etiqueta.post} - ${fecha}</div>`;
@@ -103,12 +103,10 @@ $(document).ready(function() {
 
     resultadoDiv.innerHTML = html;
 
-    // Actualizar estado de búsqueda
     const totalPages = Math.ceil(etiquetas.length / itemsPerPage);
     const currentPageNumber = currentPage + 1;
     searchStatus.innerHTML = `Página ${currentPageNumber} de ${totalPages}`;
 
-    // Actualizar botones de paginación
     const prevButton = document.getElementById('prevButton');
     const nextButton = document.getElementById('nextButton');
 
@@ -140,7 +138,6 @@ $(document).ready(function() {
     }
   }
 
-  // Manejar eventos de botones y formularios
   document.getElementById('buscarNumero').addEventListener('submit', function(event) {
     event.preventDefault();
     getPostsByNumber();
