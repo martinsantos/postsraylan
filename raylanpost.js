@@ -1,13 +1,31 @@
 $(document).ready(function() {
   function getPostsByNumber() {
     const numeroPost = document.getElementById('numeroPost').value;
-    const fechaInicio = new Date(document.getElementById('fechaInicio').value);
-    const fechaFin = new Date(document.getElementById('fechaFin').value);
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
 
+    let fechaInicio;
+    let fechaFin;
 
-       axios.get('./your_posts_2.json', { responseType: 'json' })
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
-        const data = response.data;
+        let data = response.data;
+
+        if (fechaInicio && fechaFin) {
+          data = data.filter(item => {
+            const timestamp = new Date(item.timestamp * 1000);
+            return fechaInicio <= timestamp && timestamp <= fechaFin;
+          });
+        }
+
         const etiquetas = data.map(item => {
           if (item.data && item.data.length > 0 && item.data[0].post) {
             const post = decodeURIComponent(escape(item.data[0].post));
@@ -17,8 +35,6 @@ $(document).ready(function() {
               timestamp: timestamp
             };
           }
-        }).filter(item => {
-          return fechaInicio <= item.timestamp && item.timestamp <= fechaFin;
         }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, numeroPost);
 
         showResults(etiquetas);
@@ -31,7 +47,7 @@ $(document).ready(function() {
   function getPostsByText() {
     const textoRelacionado = document.getElementById('textoRelacionado').value;
 
-    axios.get('your_posts_2.json', { responseType: 'json' })
+    axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         const data = response.data;
         const etiquetas = data.filter(item => {
@@ -77,6 +93,9 @@ $(document).ready(function() {
             <span class="card-action" onclick="copyPost(event, '${fecha} - ${etiqueta.post}')">
               <i class="bi bi-clipboard icon"></i>
               Copiar
+Lo siento por el corte anterior. Aquí está el resto del código JavaScript:
+
+```javascript
             </span>
             <span class="card-action" onclick="sharePost(event, '${etiqueta.post}')">
               <i class="bi bi-share icon"></i>
