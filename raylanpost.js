@@ -82,10 +82,13 @@ $(document).ready(function() {
     let html = '';
 
     if (etiquetas.length === 0) {
-      searchStatus.innerText = 'No se encontraron resultados para la búsqueda actual.';
+      if (searchStatus) {
+        searchStatus.innerText = 'No se encontraron resultados para la búsqueda actual.';
+      }
     } else {
       const searchStatus = document.getElementById('searchStatus');
     }
+
 
     etiquetas.forEach(etiqueta => {
       const fecha = etiqueta.timestamp.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
