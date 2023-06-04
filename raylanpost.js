@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10; // Cambia esto al número de elementos que quieres por página
+  let etiquetas = []; // Mueve la variable etiquetas aquí para que sea accesible en todas las funciones
+
   function getPostsByNumber() {
     const numeroPost = document.getElementById('numeroPost').value;
     const fechaInicioInput = document.getElementById('fechaInicio');
@@ -7,24 +11,20 @@ $(document).ready(function() {
     let fechaInicio;
     let fechaFin;
 
-    if (fechaInicio && fechaFin) {
-      data = data.filter(item => {
-        if (item) {
-          const timestamp = new Date(item.timestamp * 1000);
-          return fechaInicio <= timestamp && timestamp <= fechaFin;
-        } else {
-          return false;
-        }
-      });        
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
     }
-    
-    
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         let data = response.data;
 
         if (fechaInicio && fechaFin) {
-          data.filter(item => {
+          data = data.filter(item => {
             if (item) {
               const timestamp = new Date(item.timestamp * 1000);
               return fechaInicio <= timestamp && timestamp <= fechaFin;
@@ -32,10 +32,9 @@ $(document).ready(function() {
               return false;
             }
           });        
-
         }
 
-        const etiquetas = data.map(item => {
+        etiquetas = data.map(item => {
           if (item.data && item.data.length > 0 && item.data[0].post) {
             const post = decodeURIComponent(escape(item.data[0].post));
             const timestamp = new Date(item.timestamp * 1000);
@@ -46,7 +45,8 @@ $(document).ready(function() {
           }
         }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, numeroPost);
 
-        showResults(etiquetas);
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
       })
       .catch(error => {
         console.error(error);
@@ -59,7 +59,8 @@ $(document).ready(function() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         const data = response.data;
-        const etiquetas = data.filter(item => {
+
+        etiquetas = data.filter(item => {
           if (item.data && item.data.length > 0 && item.data[0].post) {
             const post = decodeURIComponent(escape(item.data[0].post));
             return post.toLowerCase().includes(textoRelacionado.toLowerCase());
@@ -73,89 +74,360 @@ $(document).ready(function() {
           };
         }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, 50);
 
-        showResults(etiquetas);
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
       })
       .catch(error => {
         console.error(error);
       });
   }
 
-  function showResults(etiquetas) {
+  function showResults() {
     const resultadoDiv = document.getElementById('resultado');
     const searchStatus = document.getElementById('searchStatus');
     let html = '';
 
-    if (etiquetas.length === 0) {
-      if (searchStatus) {
-        searchStatus.innerText = 'No se encontraron resultados para la búsqueda actual.';
-      }
-    } else {
-      const searchStatus = document.getElementById('searchStatus');
+    // Divide los resultados en páginas
+    const pages = [];
+    for (let i = 0; i < etiquetas.length; i += itemsPerPage) {
+      pages.push(etiquetas.slice(i, i + itemsPerPage));
     }
 
+    // Muestra solo la página actual
+    const currentPageItems = pages[currentPage];
+    if (currentPageItems && currentPageItems.length > 0) {
+      currentPageItems.forEach(etiqueta => {
+        const fecha = etiquetas.$(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10; // Cambia esto al número de elementos que quieres por página
+  let etiquetas = []; // Mueve la variable etiquetas aquí para que sea accesible en todas las funciones
 
-    etiquetas.forEach(etiqueta => {
-      const fecha = etiqueta.timestamp.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  function getPostsByNumber() {
+    const numeroPost = document.getElementById('numeroPost').value;
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
 
-      html += `
-        <div class="post">
-          <p class="post-date">${fecha}</p>
-          <p>${etiqueta.post}</p>
-          <div class="card-actions">
-            <span class="card-action" onclick="copyPost(event, '${fecha} - ${etiqueta.post}')">
-              <i class="bi bi-clipboard icon"></i>
-              Copiar
-            </span>
-            <span class="card-action" onclick="sharePost(event, '${etiqueta.post}')">
-              <i class="bi bi-share icon"></i>
-              Compartir
-            </span>
-            <span class="card-action" onclick="sendWhatsApp(event, '${etiqueta.post}')">
-              <i class="bi bi-whatsapp icon"></i>
-              WhatsApp
-            </span>
-          </div>
-        </div>
-      `;
-    });
+    let fechaInicio;
+    let fechaFin;
 
-    resultadoDiv.innerHTML = html;
-  }
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
 
-  function copyPost(event, post) {
-    event.stopPropagation();
-    const clipboard = navigator.clipboard;
-    clipboard.writeText(post)
-      .then(() => {
-        alert('El texto ha sido copiado al portapapeles.');
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        let data = response.data;
+
+        if (fechaInicio && fechaFin) {
+          data = data.filter(item => {
+            if (item) {
+              const timestamp = new Date(item.timestamp * 1000);
+              return fechaInicio <= timestamp && timestamp <= fechaFin;
+            } else {
+              return false;
+            }
+          });        
+        }
+
+        etiquetas = data.map(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            const timestamp = new Date(item.timestamp * 1000);
+            return {
+              post: post,
+              timestamp: timestamp
+            };
+          }
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, numeroPost);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
       })
-      .catch((error) => {
-        console.error('Error al copiar el texto:', error);
+      .catch(error => {
+        console.error(error);
       });
   }
 
-  function sharePost(event, post) {
-    event.stopPropagation();
-    if (navigator.share) {
-      navigator.share({
-        title: 'Compartir Post',
-        text: post
+  function getPostsByText() {
+    const textoRelacionado = document.getElementById('textoRelacionado').value;
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        const data = response.data;
+
+        etiquetas = data.filter(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            return post.toLowerCase().includes(textoRelacionado.toLowerCase());
+          }
+        }).map(item => {
+          const post = decodeURIComponent(escape(item.data[0].post));
+          const timestamp = new Date(item.timestamp * 1000);
+          return {
+            post: post,
+            timestamp: timestamp
+          };
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, 50);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
       })
-        .then(() => console.log('Post compartido con éxito.'))
-        .catch((error) => console.error('Error al compartir:', error));
-    } else {
-      alert('La función de compartir no está soportada en este navegador.');
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  function showResults() {
+    const resultadoDiv = document.getElementById('resultado');
+    const searchStatus = document.getElementById('searchStatus');
+    let html = '';
+
+    // Divide los resultados en páginas
+    const pages = [];
+    for (let i = 0; i < etiquetas.length; i += itemsPerPage) {
+      pages.push(etiquetas.slice(i, i + itemsPerPage));
     }
+
+    // Muestra solo la página actual
+    const currentPageItems = pages[currentPage];
+    if (currentPageItems && currentPageItems.length > 0) {
+      currentPageItems.forEach(etiqueta => {
+        const fecha = etiqueras.
+$(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10; // Cambia esto al número de elementos que quieres por página
+  let etiquetas = []; // Mueve la variable etiquetas aquí para que sea accesible en todas las funciones
+
+  function getPostsByNumber() {
+    const numeroPost = document.getElementById('numeroPost').value;
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
+
+    let fechaInicio;
+    let fechaFin;
+
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        let data = response.data;
+
+        if (fechaInicio && fechaFin) {
+          data = data.filter(item => {
+            if (item) {
+              const timestamp = new Date(item.timestamp * 1000);
+              return fechaInicio <= timestamp && timestamp <= fechaFin;
+            } else {
+              return false;
+            }
+          });        
+        }
+
+        etiquetas = data.map(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            const timestamp = new Date(item.timestamp * 1000);
+            return {
+              post: post,
+              timestamp: timestamp
+            };
+          }
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, numeroPost);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  function sendWhatsApp(event, post) {
-    event.stopPropagation();
-    const encodedMessage = encodeURIComponent(post);
-    const url = `https://wa.me/?text=${encodedMessage}`;
-    window.open(url, '_blank');
+  function getPostsByText() {
+    const textoRelacionado = document.getElementById('textoRelacionado').value;
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        const data = response.data;
+
+        etiquetas = data.filter(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            return post.toLowerCase().includes(textoRelacionado.toLowerCase());
+          }
+        }).map(item => {
+          const post = decodeURIComponent(escape(item.data[0].post));
+          const timestamp = new Date(item.timestamp * 1000);
+          return {
+            post: post,
+            timestamp: timestamp
+          };
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, 50);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
 
-  // Asignar las funciones a los botones correspondientes
-  document.getElementById('numeroPostButton').addEventListener('click', getPostsByNumber);
-  document.getElementById('textoRelacionadoButton').addEventListener('click', getPostsByText);
-});
+  function showResults() {
+    const resultadoDiv = document.getElementById('resultado');
+    const searchStatus = document.getElementById('searchStatus');
+    let html = '';
+
+    // Divide los resultados en páginas
+    const pages = [];
+    for (let i = 0; i < etiquetas.length; i += itemsPerPage) {
+      pages.push(etiquetas.slice(i, i + itemsPerPage));
+    }
+
+    // Muestra solo la página actual
+    const currentPageItems = pages[currentPage];
+    if (currentPageItems && currentPageItems.length > 0) {
+      currentPageItems.forEach(etiqueta => {
+        const fecha = etiquAquí está tu código con la paginación incorporada:
+
+```javascript
+$(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10; // Cambia esto al número de elementos que quieres por página
+  let etiquetas = []; // Mueve la variable etiquetas aquí para que sea accesible en todas las funciones
+
+  function getPostsByNumber() {
+    const numeroPost = document.getElementById('numeroPost').value;
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
+
+    let fechaInicio;
+    let fechaFin;
+
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        let data = response.data;
+
+        if (fechaInicio && fechaFin) {
+          data = data.filter(item => {
+            if (item) {
+              const timestamp = new Date(item.timestamp * 1000);
+              return fechaInicio <= timestamp && timestamp <= fechaFin;
+            } else {
+              return false;
+            }
+          });        
+        }
+
+        etiquetas = data.map(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            const timestamp = new Date(item.timestamp * 1000);
+            return {
+              post: post,
+              timestamp: timestamp
+            };
+          }
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, numeroPost);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  function getPostsByText() {
+    const textoRelacionado = document.getElementById('textoRelacionado').value;
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        const data = response.data;
+
+        etiquetas = data.filter(item => {
+          if (item.data && item.data.length > 0 && item.data[0].post) {
+            const post = decodeURIComponent(escape(item.data[0].post));
+            return post.toLowerCase().includes(textoRelacionado.toLowerCase());
+          }
+        }).map(item => {
+          const post = decodeURIComponent(escape(item.data[0].post));
+          const timestamp = new Date(item.timestamp * 1000);
+          return {
+            post: post,
+            timestamp: timestamp
+          };
+        }).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp).slice(0, 50);
+
+        currentPage = 0; // Reinicia la página actual cuando se obtienen nuevos resultados
+        showResults();
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  function showResults() {
+    const resultadoDiv = document.getElementById('resultado');
+    const searchStatus = document.getElementById('searchStatus');
+    let html = '';
+
+    // Divide los resultados en páginas
+    const pages = [];
+    for (let i = 0; i < etiquetas.length; i += itemsPerPage) {
+      pages.push(etiquetas.slice(i, i + itemsPerPage));
+    }
+
+    // Muestra solo la página actual
+    const currentPageItems = pages[currentPage];
+    if (currentPageItems && currentPageItems.length > 0) {
+      currentPageItems.forEach(etiqueta => {
+        const fecha = etiquAquí está tu código con la paginación incorporada:
+
+```javascript
+$(document).ready(function() {
+  let currentPage = 0;
+  const itemsPerPage = 10; // Cambia esto al número de elementos que quieres por página
+  let etiquetas = []; // Mueve la variable etiquetas aquí para que sea accesible en todas las funciones
+
+  function getPostsByNumber() {
+    const numeroPost = document.getElementById('numeroPost').value;
+    const fechaInicioInput = document.getElementById('fechaInicio');
+    const fechaFinInput = document.getElementById('fechaFin');
+
+    let fechaInicio;
+    let fechaFin;
+
+    if (fechaInicioInput.value) {
+      fechaInicio = new Date(fechaInicioInput.value);
+    }
+
+    if (fechaFinInput.value) {
+      fechaFin = new Date(fechaFinInput.value);
+    }
+
+    axios.get('./your_posts_2.json', { responseType: 'json' })
+      .then(response => {
+        let data = response.data;
+
+        if (fechaInicio && fechaFin) {
+          data = data.filter(item => {
+            if (item) {
+              const timestamp = new Date(item.timestamp * 1000);
+              return fechaInicio <= timestamp && timestamp <= fechaFin;
