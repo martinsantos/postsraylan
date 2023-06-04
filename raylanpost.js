@@ -3,7 +3,7 @@ $(document).ready(function() {
   const itemsPerPage = 10;
   let etiquetas = [];
 
-  function createEtiqueta(item) {
+    function createEtiqueta(item) {
     if (item.data && item.data.length > 0 && item.data[0].post) {
       const post = decodeURIComponent(escape(item.data[0].post));
       const timestamp = new Date(item.timestamp * 1000);
@@ -14,16 +14,18 @@ $(document).ready(function() {
     }
   }
 
+
   function getPosts() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
-        showResults();
+        console.log(etiquetas); // Mostrar los datos en la consola
       })
       .catch(error => {
         console.error(error);
       });
   }
+
 
   function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
