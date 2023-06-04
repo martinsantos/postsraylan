@@ -98,9 +98,6 @@ $(document).ready(function() {
             <span class="card-action" onclick="copyPost(event, '${fecha} - ${etiqueta.post}')">
               <i class="bi bi-clipboard icon"></i>
               Copiar
-Lo siento por el corte anterior. Aquí está el resto del código JavaScript:
-
-```javascript
             </span>
             <span class="card-action" onclick="sharePost(event, '${etiqueta.post}')">
               <i class="bi bi-share icon"></i>
