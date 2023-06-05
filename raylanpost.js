@@ -105,23 +105,8 @@ $(document).ready(function() {
       `;
       pagination.appendChild(pageItem);
     }
-
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-
-    if (currentPage === 0) {
-      prevButton.classList.add('disabled');
-    } else {
-      prevButton.classList.remove('disabled');
-    }
-
-    if (currentPage === numPages - 1) {
-      nextButton.classList.add('disabled');
-    } else {
-      nextButton.classList.remove('disabled');
-    }
   }
-
+    
   function goToPage(page) {
     currentPage = page;
     showResults();
