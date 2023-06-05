@@ -2,6 +2,7 @@ $(document).ready(function() {
   let currentPage = 0;
   const itemsPerPage = 10;
   let etiquetas = [];
+  let searchResults = []; // Nueva variable para almacenar los resultados de la búsqueda
 
   function createEtiqueta(item) {
     if (item.data && item.data.length > 0 && item.data[0].post) {
@@ -18,18 +19,19 @@ $(document).ready(function() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
-        console.log(etiquetas); // Mostrar los datos en la consola
+        searchResults = etiquetas; // Inicializar los resultados de la búsqueda con todas las etiquetas
         showResults();
       })
       .catch(error => {
         console.error(error);
+        // Aquí podrías mostrar un mensaje de error al usuario o reintentar la solicitud
       });
   }
 
   function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
     if (!isNaN(numeroPost)) {
-      etiquetas = etiquetas.slice(0, numeroPost);
+      searchResults = etiquetas.slice(0, numeroPost); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
       currentPage = 0;
       showResults();
     }
@@ -38,7 +40,7 @@ $(document).ready(function() {
   function getPostsByText() {
     const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
     if (textoRelacionado.trim() !== '') {
-      etiquetas = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
+      searchResults = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado)); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
       currentPage = 0;
       showResults();
     }
@@ -61,16 +63,15 @@ $(document).ready(function() {
     }
 
     if (fechaInicio && fechaFin) {
-      etiquetas = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin);
+      searchResults = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
       currentPage = 0;
       showResults();
     }
   }
-
   function showResults() {
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentPosts = etiquetas.slice(startIndex, endIndex);
+    const currentPosts = searchResults.slice(startIndex, endIndex); // Usar searchResults en lugar de etiquetas
 
     const postList = document.getElementById('postList');
     postList.innerHTML = '';
@@ -94,7 +95,7 @@ $(document).ready(function() {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
-    const numPages = Math.ceil(etiquetas.length / itemsPerPage);
+    const numPages = Math.ceil(searchResults.length / itemsPerPage); // Usar searchResults en lugar de etiquetas
 
     for (let i = 0; i < numPages; i++) {
       const pageItem = document.createElement('li');
@@ -131,6 +132,7 @@ $(document).ready(function() {
     document.getElementById('textoRelacionado').value = '';
     document.getElementById('fechaInicio').value = '';
     document.getElementById('fechaFin').value = '';
+    searchResults = etiquetas; // Restablecer los resultados de la búsqueda a todas las etiquetas
   }
 
   // Ocultar el listado de posts y la paginación al cargar la página
@@ -165,7 +167,7 @@ $(document).ready(function() {
   });
 
   nextButton.addEventListener('click', function() {
-    const numPages = Math.ceil(etiquetas.length / itemsPerPage);
+    const numPages = Math.ceil(searchResults.length / itemsPerPage); // Usar searchResults en lugar de etiquetas
     if (currentPage < numPages - 1) {
       currentPage++;
       showResults();
