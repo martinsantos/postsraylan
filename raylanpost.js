@@ -1,8 +1,9 @@
+window.jQuery || document.write('<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"><\/script>');
 $(document).ready(function() {
   let currentPage = 0;
   const itemsPerPage = 10;
   let etiquetas = [];
-  let searchResults = []; // Nueva variable para almacenar los resultados de la búsqueda
+  let searchResults = []; 
 
   function createEtiqueta(item) {
     if (item.data && item.data.length > 0 && item.data[0].post) {
@@ -19,19 +20,18 @@ $(document).ready(function() {
     axios.get('./your_posts_2.json', { responseType: 'json' })
       .then(response => {
         etiquetas = response.data.map(createEtiqueta).filter(Boolean).sort((a, b) => a.timestamp - b.timestamp);
-        searchResults = etiquetas; // Inicializar los resultados de la búsqueda con todas las etiquetas
+        searchResults = etiquetas; 
         showResults();
       })
       .catch(error => {
         console.error(error);
-        // Aquí podrías mostrar un mensaje de error al usuario o reintentar la solicitud
       });
   }
 
   function getPostsByNumber() {
     const numeroPost = parseInt(document.getElementById('numeroPost').value);
     if (!isNaN(numeroPost)) {
-      searchResults = etiquetas.slice(0, numeroPost); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
+      searchResults = etiquetas.slice(0, numeroPost);
       currentPage = 0;
       showResults();
     }
@@ -40,7 +40,7 @@ $(document).ready(function() {
   function getPostsByText() {
     const textoRelacionado = document.getElementById('textoRelacionado').value.toLowerCase();
     if (textoRelacionado.trim() !== '') {
-      searchResults = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado)); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
+      searchResults = etiquetas.filter(item => item.post.toLowerCase().includes(textoRelacionado));
       currentPage = 0;
       showResults();
     }
@@ -59,19 +59,20 @@ $(document).ready(function() {
 
     if (fechaFinInput.value) {
       fechaFin = new Date(fechaFinInput.value);
-      fechaFin.setHours(23, 59, 59); // Establecer la hora final al final del día
+      fechaFin.setHours(23, 59, 59); 
     }
 
     if (fechaInicio && fechaFin) {
-      searchResults = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin); // Actualizar los resultados de la búsqueda en lugar de las etiquetas
+      searchResults = etiquetas.filter(item => fechaInicio <= item.timestamp && item.timestamp <= fechaFin);
       currentPage = 0;
       showResults();
     }
   }
+
   function showResults() {
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentPosts = searchResults.slice(startIndex, endIndex); // Usar searchResults en lugar de etiquetas
+    const currentPosts = searchResults.slice(startIndex, endIndex); 
 
     const postList = document.getElementById('postList');
     postList.innerHTML = '';
@@ -95,70 +96,33 @@ $(document).ready(function() {
     const pagination = document.getElementById('pagination');
     pagination.innerHTML = '';
 
-    const numPages = Math.ceil(searchResults.length / itemsPerPage); // Usar searchResults en lugar de etiquetas
+    const numPages = Math.ceil(searchResults.length / itemsPerPage);
 
     for (let i = 0; i < numPages; i++) {
       const pageItem = document.createElement('li');
       pageItem.classList.add('page-item');
       pageItem.innerHTML = `
-        <a class="page-link" href="#" onclick="goToPage(${i})">${i + 1}</a>
+        <a class="page-link" href="#">${i + 1}</a>
       `;
+
+      if (i === currentPage) {
+        pageItem.classList.add('active');
+      }
+
+      pageItem.addEventListener('click', function(event) {
+        event.preventDefault();
+        currentPage = i;
+        showResults();
+      });
+
       pagination.appendChild(pageItem);
     }
   }
-    
-  function goToPage(page) {
-    currentPage = page;
-    showResults();
-  }
 
-  function resetFields() {
-    document.getElementById('numeroPost').value = '';
-    document.getElementById('textoRelacionado').value = '';
-    document.getElementById('fechaInicio').value = '';
-    document.getElementById('fechaFin').value = '';
-    searchResults = etiquetas; // Restablecer los resultados de la búsqueda a todas las etiquetas
-  }
+  document.getElementById('numeroPost').addEventListener('change', getPostsByNumber);
+  document.getElementById('textoRelacionado').addEventListener('change', getPostsByText);
+  document.getElementById('fechaInicio').addEventListener('change', getPostsByDate);
+  document.getElementById('fechaFin').addEventListener('change', getPostsByDate);
 
-  // Ocultar el listado de posts y la paginación al cargar la página
-  $('#postList').hide();
-  $('#pagination').hide();
-
-  // Reiniciar campos de búsqueda y resultados al hacer clic en los botones de búsqueda
-  $('#numeroPostButton').click(function() {
-    resetFields();
-    getPostsByNumber();
-  });
-
-  $('#textoRelacionadoButton').click(function() {
-    resetFields();
-    getPostsByText();
-  });
-
-  $('#fechaButton').click(function() {
-    resetFields();
-    getPostsByDate();
-  });
-
-  // Habilitar navegación entre páginas
-  const prevButton = document.getElementById('prevButton');
-  const nextButton = document.getElementById('nextButton');
-
-  prevButton.addEventListener('click', function() {
-    if (currentPage > 0) {
-      currentPage--;
-      showResults();
-    }
-  });
-
-  nextButton.addEventListener('click', function() {
-    const numPages = Math.ceil(searchResults.length / itemsPerPage); // Usar searchResults en lugar de etiquetas
-    if (currentPage < numPages - 1) {
-      currentPage++;
-      showResults();
-    }
-  });
-
-  // Obtener los posts al cargar la página
   getPosts();
 });

@@ -1,80 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts Raylan</title>
-    <!-- Incluir Bootstrap CSS -->
+    <title>Post searcher</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-<body>
-    <!-- HEADER -->
-    <header class="bg-primary text-white text-center p-3">
-        <h1>Posts Raylan</h1>
-    </header>
+  </head>
+  <body>
+    <div class="container">
+      <div class="my-4">
+        <h1>Buscador de posts</h1>
+      </div>
 
-    <!-- Bloques de filtro -->
-    <div class="container mt-3">
-        <!-- Filtro por cantidad -->
-        <div class="row mb-3">
-            <div class="col">
-                <div class="input-group">
-                    <input type="number" id="numeroPost" class="form-control" placeholder="Cantidad de posts">
-                    <div class="input-group-append">
-                        <button id="numeroPostButton" class="btn btn-outline-secondary">Filtrar por cantidad</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="form-group">
+        <label for="numeroPost">Número de posts</label>
+        <input type="number" id="numeroPost" class="form-control">
+      </div>
 
-        <!-- Filtro por término -->
-        <div class="row mb-3">
-            <div class="col">
-                <div class="input-group">
-                    <input type="text" id="textoRelacionado" class="form-control" placeholder="Término de búsqueda">
-                    <div class="input-group-append">
-                        <button id="textoRelacionadoButton" class="btn btn-outline-secondary">Filtrar por término</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="form-group">
+        <label for="textoRelacionado">Texto relacionado</label>
+        <input type="text" id="textoRelacionado" class="form-control">
+      </div>
 
-        <!-- Filtro por fecha -->
-        <div class="row mb-3">
-            <div class="col">
-                <div class="input-group">
-                    <input type="date" id="fechaInicio" class="form-control">
-                    <input type="date" id="fechaFin" class="form-control">
-                    <div class="input-group-append">
-                        <button id="fechaButton" class="btn btn-outline-secondary">Filtrar por fecha</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="form-group">
+        <label for="fechaInicio">Fecha de inicio</label>
+        <input type="date" id="fechaInicio" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="fechaFin">Fecha de fin</label>
+        <input type="date" id="fechaFin" class="form-control">
+      </div>
+
+      <div id="postList" class="mb-4"></div>
+
+      <nav>
+        <ul id="pagination" class="pagination"></ul>
+      </nav>
     </div>
 
-    <div class="container mt-12">
-      <div id="postList"></div>
-  
-      <nav aria-label="Page navigation example">
-          <ul id="pagination" class="pagination justify-content-center">
-              <li class="page-item">
-                  <a id="prevButton" class="page-link" href="#">Anterior</a>
-              </li>
-              <!-- Los elementos de la página se agregarán aquí -->
-              <li class="page-item">
-                  <a id="nextButton" class="page-link" href="#">Siguiente</a>
-              </li>
-          </ul>
-      </nav>
-  </div>
-
-    <!-- Incluir jQuery y Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    <!-- Incluir nuestro propio archivo JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="raylanpost.js"></script>
-</body>
+  </body>
 </html>
