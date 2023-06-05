@@ -1,51 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>RAYLAN POSTAS</title>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>
-  <link rel='stylesheet' href='raylanpoststylos.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posts Raylan</title>
+    <!-- Incluir Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-  <div class="container">
-    <h1>RAYLAN POSTAS</h1>
-  
-    <div class="form-row">
-      <div class="col">
-        <label for="numeroPost">Número de Post:</label>
-        <input type="number" id="numeroPost" class="form-control">
-        <button type="button" id="numeroPostButton" class="btn btn-primary">Obtener Posts</button>
-      </div>
+    <!-- HEADER -->
+    <header class="bg-primary text-white text-center p-3">
+        <h1>Posts Raylan</h1>
+    </header>
 
-      <div class="col">
-        <label for="textoRelacionado">Texto Relacionado:</label>
-        <input type="text" id="textoRelacionado" class="form-control">
-        <button type="button" id="textoRelacionadoButton" class="btn btn-primary">Obtener Posts</button>
-      </div>
+    <!-- Bloques de filtro -->
+    <div class="container mt-3">
+        <!-- Filtro por cantidad -->
+        <div class="row mb-3">
+            <div class="col">
+                <div class="input-group">
+                    <input type="number" id="numeroPost" class="form-control" placeholder="Cantidad de posts">
+                    <div class="input-group-append">
+                        <button id="numeroPostButton" class="btn btn-outline-secondary">Filtrar por cantidad</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      <div class="col">
-        <label for="fechaInicio">Fecha de inicio:</label>
-        <input type="date" id="fechaInicio" class="form-control">
-        <label for="fechaFin">Fecha de fin:</label>
-        <input type="date" id="fechaFin" class="form-control">
-        <button type="button" id="fechaButton" class="btn btn-primary">Buscar por fecha</button>
-      </div>
+        <!-- Filtro por término -->
+        <div class="row mb-3">
+            <div class="col">
+                <div class="input-group">
+                    <input type="text" id="textoRelacionado" class="form-control" placeholder="Término de búsqueda">
+                    <div class="input-group-append">
+                        <button id="textoRelacionadoButton" class="btn btn-outline-secondary">Filtrar por término</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtro por fecha -->
+        <div class="row mb-3">
+            <div class="col">
+                <div class="input-group">
+                    <input type="date" id="fechaInicio" class="form-control">
+                    <input type="date" id="fechaFin" class="form-control">
+                    <div class="input-group-append">
+                        <button id="fechaButton" class="btn btn-outline-secondary">Filtrar por fecha</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="resultado">
-      <div id="searchResult" class="message"></div>
-      <div id="postList"></div>
-      <ul class="pagination" id="pagination"></ul>
-      <p class="message" id="searchStatus">Continúa buscando o borra los campos para realizar una nueva búsqueda.</p>
-    </div>
-
-    <button type="button" id="prevButton" class="btn btn-primary">Anterior</button>
-    <button type="button" id="nextButton" class="btn btn-primary">Siguiente</button>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="raylanpost.js"></script>
+    <!-- Incluir jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Incluir nuestro propio archivo JS -->
+    <script src="raylanpost.js"></script>
 </body>
 </html>
